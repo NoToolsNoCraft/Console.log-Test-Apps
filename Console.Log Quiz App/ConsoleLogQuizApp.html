@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Quiz App</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center;
+            padding: 20px;
+            font-size: 1.6rem;
+
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+        .task {
+            margin-bottom: 10px;
+        }
+        .result {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        .explanation {
+            margin-top: 10px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>JavaScript Quiz App</h1>
+    <p style="margin-top: 10px; text-align: center;">Please enter your answers using lowercase characters only.<br> For multiple answers, separate each one with a comma and a space (e.g., <code>5, 6</code>).</p>
+   
+    <div class="quiz-container">
+        <div class="task" id="task">console.log('5' + 3)</div>
+        <input type="text" id="userAnswer" placeholder="Enter your answer here">
+        <button onclick="checkAnswer()">Submit</button>
+        <button onclick="nextTask()" id="nextButton" style="display: none;">Next</button>
+        <div class="result" id="result"></div>
+        <div class="explanation" id="explanation"></div>
+    </div>
+
+    <script>
+        let tasks = [
+        {
+                question: "console.log('5' + 3)",
+                correctAnswer: "'53'",
+                explanation: "In this case, the + operator is used for string concatenation when one of the operands is a string. JavaScript converts the number 3 to a string and concatenates it with '5', resulting in '53'."
+            },
+            {
+                question: "console.log('5' - 3)",
+                correctAnswer: "2",
+                explanation: "The - operator triggers numeric coercion. JavaScript converts the string '5' to a number and then performs the subtraction operation. Thus, 5 - 3 results in 2."
+            },
+            {
+                question: "console.log(typeof ('5' + 3))",
+                correctAnswer: "string",
+                explanation: "When '5' + 3 is evaluated, it results in '53' (a string). Therefore, typeof ('5' + 3) is 'string'."
+            },
+            {
+                question: "console.log(typeof ('5' - 3))",
+                correctAnswer: "number",
+                explanation: "The - operator coerces both operands to numbers, so ('5' - 3) is a number. Therefore, typeof ('5' - 3) is 'number'."
+            },
+            {
+                question: "console.log('2' + 3 * 4)",
+                correctAnswer: "'212'",
+                explanation: "This statement evaluates based on the operator precedence in JavaScript: Multiplication (*) has higher precedence than addition (+). So, 3 * 4 is evaluated first, resulting in 12. The expression now becomes '2' + 12. The + operator between a string and a number causes string concatenation. JavaScript converts 12 to a string and concatenates it with '2', resulting in '212'."
+            },
+            {
+                question: "var a = 5\nconsole.log(a++)\nconsole.log(a)",
+                correctAnswer: "5, 6",
+                explanation: "The first line prints 5 because a++ is the post-increment operator, which returns the current value of a before incrementing it. The second line prints 6 because a has been incremented after the previous line."
+            },
+            {
+                question: "console.log(a+)",
+                correctAnswer: ["SyntaxError", "syntaxerror", "syntax error"],
+                explanation: "The line console.log(a+) will throw a SyntaxError because + by itself is incomplete and doesn't form a valid expression."
+            },
+            {
+                question: "console.log(typeof NaN)",
+                correctAnswer: "number",
+                explanation: "When you run console.log(typeof NaN);, it prints 'number' because NaN is technically classified as a numeric value, even though it represents an invalid or undefined number."
+            },
+            {
+                question: "console.log(NaN === NaN)",
+                correctAnswer: "false",
+                explanation: "NaN represents an invalid or undefined number, and the logic is that if a value is 'not a number,' it shouldn't be equal to any value, including itself."
+            },
+            {
+                question: "console.log('1234' + 4321)",
+                correctAnswer: "'12344321'",
+                explanation: "The + operator with a string results in string concatenation. JavaScript converts the number 4321 to a string and appends it to '1234', resulting in '12344321'."
+            },
+            {
+                question: "console.log('14999' - 14998)",
+                correctAnswer: "1",
+                explanation: "The - operator triggers numeric coercion. JavaScript converts the string '14999' to a number and then performs the subtraction operation, resulting in 1."
+            },
+            {
+                question: "console.log(1 < 2 < 3)",
+                correctAnswer: "true",
+                explanation: "The reason 1 < 2 < 3 works as expected is because the comparison is between numbers, and the result (true) is compared to 3 afterward."
+            },
+            {
+                question: "console.log(3 > 2 > 1)",
+                correctAnswer: "false",
+                explanation: "In 3 > 2 > 1, the first comparison results in true, but then true is treated as 1, which leads to the unexpected result when compared to 1."
+            }
+        ];
+
+        // Shuffle the tasks array to randomize the order of tasks
+        tasks = tasks.sort(() => Math.random() - 0.5);
+
+        let currentTaskIndex = 0;
+
+        function showTask() {
+            document.getElementById('task').innerText = tasks[currentTaskIndex].question;
+            document.getElementById('userAnswer').value = '';
+            document.getElementById('result').innerText = '';
+            document.getElementById('explanation').innerText = '';
+            document.getElementById('nextButton').style.display = 'none';
+        }
+
+        function checkAnswer() {
+            const userAnswer = document.getElementById('userAnswer').value.trim();
+            const currentTask = tasks[currentTaskIndex];
+
+            if (userAnswer === currentTask.correctAnswer) {
+                document.getElementById('result').innerText = 'Correct!';
+                document.getElementById('result').style.color = 'green';
+                document.getElementById('nextButton').style.display = 'inline';
+            } else {
+                document.getElementById('result').innerText = 'Incorrect. Try again.';
+                document.getElementById('result').style.color = 'red';
+            }
+            document.getElementById('explanation').innerText = currentTask.explanation;
+        }
+
+        function nextTask() {
+            if (currentTaskIndex < tasks.length - 1) {
+                currentTaskIndex++;
+                showTask();
+            } else {
+                alert('You have completed all the tasks!');
+            }
+        }
+
+        // Initial task display
+        showTask();
+    </script>
+</body>
+</html>
