@@ -1,0 +1,318 @@
+<!--
+
+    The Array Operations Example App allows users to modify an array and perform operations 
+    like filtering, mapping, and reducing in real-time. 
+    This app provides a dynamic experience where users can change the values in the array 
+    and modify the filter, map, and reduce factors to see how they affect the result. 
+
+    Core Logic:
+    The core logic is based on the following formula:
+
+    let arr = [0, 1, 2, 3, 4, 5, 6, 7];
+    let res = arr.filter((e) => e < ${Filter Value})
+                 .map((c) => c * ${Map Factor})
+                 .reduce((acc, cv) => acc + cv, ${Reduce Start});
+    console.log(res);
+    Console Result: The result of the operation (filtered, mapped, and reduced result).
+
+    =========================================================
+    Here is an example:
+
+            let arr = [0, 1, 2, 3, 4, 5];
+            let res = arr.filter((e) => e < 3)
+                         .map((c) => c * 2)
+                         .reduce((acc, cv) => acc + cv);
+            console.log(res);
+
+            Console Result: 6
+
+    Explanation:
+            1. `filter()` filters out elements in the array that are less than 3.
+            2. `map()` multiplies each filtered element by 2.
+            3. `reduce()` sums up all the elements in the resulting array, starting from 0.
+    
+    In this case:
+            - The original array is: [0, 1, 2, 3, 4, 5]
+            - After filtering: [0, 1, 2]
+            - After mapping: [0, 2, 4]
+            - After reducing: 0 + 2 + 4 = 6
+    =========================================================
+    Users can modify:
+    - The values in the array using the input fields for each number in the array.
+    - The Filter Value, which determines the criteria for filtering the array 
+    (filter numbers lower than the one that is set).
+    - The Map Factor, which multiplies each filtered element by the given value.
+    - The Reduce Start value, which sets the initial value for the reduction (sum of the array).
+
+    Once the user clicks the "Update Result" button, the app will update the result both in the 
+    app's interface and in the console.
+
+    Instructions:
+    - Modify the values in the input fields for the array, filter value, map factor, and reduce 
+    start value to experiment with different scenarios.
+    - The result of the array manipulation will be displayed in the "Filtered, Mapped, and Reduced 
+    result" section on the webpage.
+    - In addition to the updated result on the page, the same result and intermediate data will also 
+    be logged to the console.
+    - To view the additional test results and operation details, open the browser's developer tools 
+    (usually with F12 or right-click → Inspect) and navigate to the "Console" tab.
+    - The console will show the following information:
+      - Array: The current array values.
+      - Filter Value: The filtering criteria.
+      - Map Factor: The multiplication factor applied to each element.
+      - Reduce Start: The starting value for the reduction.
+      - The final result of the operation (filtered, mapped, and reduced).
+
+    This app provides a great way to understand how filter, map, and reduce operations work on an array 
+    in JavaScript. Users can experiment by modifying the values and instantly see the effect on both the 
+    webpage and the console.
+
+    Enjoy testing your JavaScript array operations!
+
+-->
+
+        
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Array > Filter > Map > Reduce > Tool</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f8ff;
+            box-sizing: border-box;
+        }
+        .container {
+            text-align: center;
+            padding: 50px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-height: 100%;
+            box-sizing: border-box; /* Ensure border-box is applied */
+            overflow-x: auto
+            
+        }
+        h1 {
+            color: #333;
+            font-size: 22px;
+
+        }
+        .input-container {
+            margin: 10px 0;
+        }
+        input {
+            width: 50px;
+            padding: 5px;
+            margin: 5px;
+            text-align: center;
+            font-size: 16px;
+        }
+        .operation-input {
+            width: 80px;
+            margin: 5px;
+        }
+        button {
+            padding: 8px 15px;
+            margin-top: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            overflow: hidden;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+        .code-container {
+            text-align: left; /* Aligns the code block left within the container */
+            margin: 10px 0; /* Adds space around the code block */
+        }
+
+        code {
+            display: block; /* Ensures the code block takes the full width */
+            
+            font-size: 11px;
+            background-color: #f7f7f7; /* Optional: adds a light background for better readability */
+            padding: 10px; /* Adds padding to the code block */
+            border-radius: 4px; /* Rounds the corners */
+        }
+        .result {
+            font-weight: bold;
+            font-size: 24px;
+            color: #2f8a68;
+        }
+        @media (max-width: 480px) {
+        h1 {
+        font-size: 2rem;
+        }
+        input {
+        width: 45px;
+        font-size: 0.9rem;
+        }
+        button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        }
+        .result {
+        font-size: 1.2rem;
+        }
+        code {
+        font-size: 0.8rem;
+        }          
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Array => Filter => Map => Reduce <br>=> Console Tool</h1>
+        <!-- Displaying the formula as a paragraph -->
+        <p><strong>Formula used in this app:</strong></p>
+        <div class="code-container">
+            <code>
+                let arr = [0, 1, 2, 3, 4, 5, 6, 7];<br>
+                let res = arr.filter((e) =&gt; e &lt; ${Filter Value})<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.map((c) =&gt; c * ${Map Factor})<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.reduce((acc, cv) =&gt; acc + cv, ${Reduce Start});<br>
+                console.log(res);
+            </code>
+        </div>
+        <p>Modify the numbers and operations to see the result:</p>
+
+        <!-- Number input fields -->
+        <div class="input-container">
+            <input id="num0" type="number" value="0">
+            <input id="num1" type="number" value="1">
+            <input id="num2" type="number" value="2">
+            <input id="num3" type="number" value="3">
+            <input id="num4" type="number" value="4">
+            <input id="num5" type="number" value="5">
+            <input id="num6" type="number" value="6">
+            <input id="num7" type="number" value="7">
+        </div>
+
+        <!-- Filter operation input -->
+        <div class="input-container">
+            <label for="filterVal">Filter Value:</label>
+            <input id="filterVal" type="number" value="3" class="operation-input">
+        </div>
+
+        <!-- Map operation input -->
+        <div class="input-container">
+            <label for="mapVal">Map Factor:</label>
+            <input id="mapVal" type="number" value="2" class="operation-input">
+        </div>
+
+        <!-- Reduce operation input -->
+        <div class="input-container">
+            <label for="reduceVal">Reduce Start:</label>
+            <input id="reduceVal" type="number" value="0" class="operation-input">
+        </div>
+
+        <!-- Button to update the result and run both functions -->
+        <button onclick="updateResult(); runDynamicCodeInConsole();">Update Result</button>
+
+
+        <!-- Display the result -->
+        <p>Filtered, Mapped, and Reduced result:</p>
+        <p id="result" class="result">Loading...</p>
+    </div>
+
+    <script>
+        // Function to update the result based on user input
+        function updateResult() {
+            // Get the values from the input fields for numbers in the array
+            let arr = [
+                parseInt(document.getElementById('num0').value),
+                parseInt(document.getElementById('num1').value),
+                parseInt(document.getElementById('num2').value),
+                parseInt(document.getElementById('num3').value),
+                parseInt(document.getElementById('num4').value),
+                parseInt(document.getElementById('num5').value),
+                parseInt(document.getElementById('num6').value),
+                parseInt(document.getElementById('num7').value)
+            ];
+
+            // Get the filter, map, and reduce values from the inputs
+            let filterVal = parseInt(document.getElementById('filterVal').value);
+            let mapVal = parseInt(document.getElementById('mapVal').value);
+            let reduceVal = parseInt(document.getElementById('reduceVal').value);
+
+            // Apply filter, map, and reduce operations based on user input
+            let res = arr.filter((e) => e < filterVal)   // Filter based on filterVal
+                        .map((c) => c * mapVal)          // Multiply each element by mapVal
+                        .reduce((acc, cv) => acc + cv, reduceVal);  // Sum all elements, starting with reduceVal
+
+            // Display the result in the HTML
+            document.getElementById('result').textContent = res;
+        
+
+         // Log the same operations and result to the console
+        console.log("TEST STARTS HERE!")
+        console.log("First let's display the results that the app came up with")          
+        console.log("Array:", arr);
+        console.log("Filter Value:", filterVal);
+        console.log("Map Factor:", mapVal);
+        console.log("Reduce Start:", reduceVal);
+        console.log("===> App result:", res);
+        console.log("==============================================================");
+    }
+        // Initial update on page load
+        updateResult();
+
+
+        // Function to run the provided code with app data in the console
+    function runDynamicCodeInConsole() {
+        // Get the values from the input fields for numbers in the array
+        let arr = [
+            parseInt(document.getElementById('num0').value),
+            parseInt(document.getElementById('num1').value),
+            parseInt(document.getElementById('num2').value),
+            parseInt(document.getElementById('num3').value),
+            parseInt(document.getElementById('num4').value),
+            parseInt(document.getElementById('num5').value),
+            parseInt(document.getElementById('num6').value),
+            parseInt(document.getElementById('num7').value)
+        ];
+
+        // Get the filter, map, and reduce values from the inputs
+        let filterVal = parseInt(document.getElementById('filterVal').value);
+        let mapVal = parseInt(document.getElementById('mapVal').value);
+        let reduceVal = parseInt(document.getElementById('reduceVal').value);
+
+        // Log the dynamic values for reference in the console
+        console.log("Now let's test the results with the console.log result:");
+        console.log("Array:", arr);
+        console.log("Filter Value:", filterVal);
+        console.log("Map Factor:", mapVal);
+        console.log("Reduce Start:", reduceVal);
+
+        // Dynamically running the code with the app's data
+        let resTest = arr.filter((e) => e < filterVal)   // Filter based on filterVal
+                    .map((c) => c * mapVal)          // Multiply each element by mapVal
+                    .reduce((acc, cv) => acc + cv, reduceVal);  // Sum all elements, starting with reduceVal
+
+        // Log the result of the operation
+        console.log("Console.log test (should show the same result):", resTest);
+    }
+
+    // Initial update on page load (optional)
+    runDynamicCodeInConsole();
+    </script>
+
+</body>
+</html>
