@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Console.log Simulator</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        textarea {
+            width: 50%;
+            height: 100px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .output {
+            margin-top: 20px;
+            width: 50%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Console.log Simulator</h1>
+    <textarea id="codeInput" placeholder="Enter JavaScript code (e.g., console.log('Hello, World!'))"></textarea>
+    <button onclick="runCode()">Run Code</button>
+    <div id="output" class="output"></div>
+
+    <script>
+        function runCode() {
+            const codeInput = document.getElementById('codeInput').value;
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Clear previous output
+            let outputGenerated = false;
+            
+            try {
+                // Capture console.log output
+                const consoleLog = console.log;
+                console.log = function(...args) {
+                    outputGenerated = true;
+                    outputDiv.innerHTML += args.join(' ') + '\n';
+                    consoleLog.apply(console, args);
+                };
+                
+                // Evaluate the user input
+                eval(codeInput);
+                
+                // Check if no output was generated
+                if (!outputGenerated) {
+                    outputDiv.innerHTML = 'Warning: No output was generated. Check if your code is correct or if it produces any output.';
+                }
+                
+                // Restore original console.log
+                console.log = consoleLog;
+            } catch (error) {
+                outputDiv.innerHTML = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
